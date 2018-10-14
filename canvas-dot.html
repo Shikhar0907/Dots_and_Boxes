@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="200" height="100"
+style="border:1px solid #d3d3d3;">
+
+</canvas>
+
+<script>
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d"),
+lines = [],
+square = [];
+user = true;
+x = 5;
+y = 5;
+canvas.width = 350;
+canvas.height = 350;
+w = 305;
+h = 305;
+i = 0;
+j = 0;
+k = 0;
+count1 = 0;
+count2 = 0;
+sqr = 0;
+sqr_no = 0;
+point1_x = 0;
+point1_y = 0;
+point2_x = 0;
+point2_y = 0;
+point2_y = 0;
+point3_x = 0;
+point3_y = 0;
+point4_x = 0;
+point4_y = 0;
+
+while (x < w) {
+  while (y < h) {
+    //ctx.fillStyle="#FF0000";
+		ctx.lineWidth = 5;
+    ctx.strokeRect(x,y,50,50);
+
+		ctx.stroke();
+		sqr_no = sqr_no + 1;
+		pt2_x = x+50;
+		pt2_y = y;
+		pt3_x = x+50;
+		pt3_y = y+50;
+		pt4_x = x;
+		pt4_y = y+50;
+		square.push({sqr: sqr_no,point1_x: x,point1_y:y,point2_x:pt2_x,point2_y:pt2_y,point3_x:pt3_x,point3_y:pt3_y,
+		point4_x:pt4_x,point4_y:pt4_y,line1: false,line2:false,line3:false,line4:false});
+
+    y = y+50;
+    }
+  x = x+50;
+  y = 5;
+}
+x = 5;
+y = 5;
+
+while(i<48)
+{
+	if (x == 5 && y ==5)
+    {
+    		ctx.moveTo(x,y);
+				lines.push({x: x,y: y,no:i});
+        x = x+50;
+        ctx.lineTo(x,y);
+				lines.push({x: x,y: y,no:i});
+    }
+    else if ((x<300 && y==5) || (x<300 && y==105) || (x<300 && y==205) || (x<300 && y==305))
+    {
+    	x = x+50;
+    	ctx.lineTo(x,y);
+			lines.push({x: x,y: y,no:i});
+
+    }
+    else if ((x==w && y==5) || (x==5 && y==55) || (x==w && y==105) || (x==5 && y== 155) || (x == w && y == 205) || (x==5 && y==255))
+    {
+    	y = y+50;
+    	ctx.lineTo(x,y);
+			lines.push({x: x,y: y,no:i});
+    }
+    else if ((x <= w && y == 55) || (x <= w && y == 155) || (x<=w && y == 255))
+    {
+    		x = x-50;
+        ctx.lineTo(x,y);
+				lines.push({x: x,y: y,no:i});
+    }
+
+	i = i+1;
+}
+
+while (j<48)
+{
+	if (x == w && y==h)
+    {
+    		ctx.moveTo(x,y);
+        y = y-50;
+        ctx.lineTo(x,y);
+				k = j+48;
+				lines.push({x: x,y: y,no: k});
+    }
+    else if ((x== w && y > 5) || (x == 205 && y>5) || (x==105 && y>5) || (x==5 && y >5))
+    {
+    		y = y-50;
+        ctx.lineTo(x,y);
+				k = j+48;
+				lines.push({x: x,y: y,no:k});
+    }
+    else if ((x == w && y==5) || (x == 255 && y== 305) || (x==205 && y==5) || (x==155 && y==h) || (x==105 && y==5) || (x==55 && y==h))
+    {
+    		x = x-50;
+        ctx.lineTo(x,y);
+				k = j+48;
+				lines.push({x: x,y: y,no: k});
+    }
+    else if ((x==255 && y<=h) || (x ==155 && y<= h) || (x==55 && y<=h))
+    {
+    		y = y+50;
+        ctx.lineTo(x,y);
+				k = j+48;
+				lines.push({x: x,y: y,no: k});
+    }
+    j = j+1;
+}
+ctx.lineWidth = 5;
+ctx.stroke();
+
+var lineClicked = [];
+canvas.onclick = function(e) {
+  var r = canvas.getBoundingClientRect(), // adjust to proper mouse position
+      x = e.clientX - r.left,
+      y = e.clientY - r.top;
+  // for each line segment, build segment to path and check
+
+  for(i=0; i < 96; i++)
+  {
+    ctx.beginPath();                        // new segment
+    ctx.moveTo(lines[i].x, lines[i].y);     // start is current point
+    ctx.lineTo(lines[i+1].x, lines[i+1].y); // end point is next
+
+    if (lineClicked.indexOf(i) !== -1) {
+      continue;
+    }
+    if (ctx.isPointInStroke(x, y)) {
+      lineClicked.push(i);
+    }
+    if (user == true && ctx.isPointInStroke(x, y))
+    {
+			     console.log(lines[i]);
+			        console.log(lines[i+1]);       // x,y is on line?
+
+			           ctx.strokeStyle = "blue";              // stroke red for demo
+                 ctx.stroke();
+			           squaresh(x,y);
+			           squaresv(x,y);
+			           horizintal_last(x,y);
+			           vertical_first(x,y);
+                 all_true(user);
+                 user = false;
+			           break;
+    }
+    else if (user == false && ctx.isPointInStroke(x, y))
+    {
+        console.log(lines[i]);
+        console.log(lines[i+1]);       // x,y is on line?
+        ctx.strokeStyle = "red";              // stroke red for demo
+        ctx.stroke();
+        squaresh(x,y);
+        squaresv(x,y);
+        horizintal_last(x,y);
+        vertical_first(x,y);
+        all_true(user);
+        user = true;
+        break;
+
+    }
+  }
+}
+function squaresh(x,y)
+{
+	for (j=0;j<36;j++)
+	{
+		ctx.beginPath();
+		ctx.moveTo(square[j].point1_x,square[j].point2_y);
+		ctx.lineTo(square[j].point2_x,square[j].point2_y);
+		if (ctx.isPointInStroke(x,y))
+		{
+			if (square[j].point1_y == square[j].point2_y)
+			{
+				square[j].line1 = true;
+				if (square[j].point1_y != 5)
+				{
+					square[j-1].line3 = true;
+					console.log(square[j-1]);
+				}
+			}
+			console.log(square[j]);
+
+			break;
+		}
+	}
+}
+function squaresv(x,y)
+{
+	for (j=0;j<36;j++)
+	{
+		ctx.beginPath();
+		ctx.moveTo(square[j].point2_x,square[j].point2_y);
+		ctx.lineTo(square[j].point3_x,square[j].point3_y);
+		if(ctx.isPointInStroke(x,y))
+		{
+			if (square[j].point2_x == square[j].point3_x)
+			{
+				square[j].line2 = true;
+				if (square[j].point2_x < w)
+				{
+					square[j+6].line4 = true;
+				}
+			}
+			console.log(square[j]);
+			console.log(square[j+6]);
+
+      break;
+		}
+	}
+}
+function horizintal_last(x,y)
+{
+	for (j=0;j<36;j++)
+	{
+		ctx.beginPath();
+		ctx.moveTo(square[j].point3_x,square[j].point3_y);
+		ctx.lineTo(square[j].point4_x,square[j].point4_y);
+		if(ctx.isPointInStroke(x,y))
+		{
+			if(square[j].point3_y == h && square[j].point4_y == h)
+			{
+				square[j].line3 = true;
+			}
+			console.log(square[j]);
+
+      break;
+		}
+	}
+}
+function vertical_first(x,y)
+{
+	for (j=0;j<36;j++)
+	{
+		ctx.beginPath();
+		ctx.moveTo(square[j].point1_x,square[j].point1_y);
+		ctx.lineTo(square[j].point4_x,square[j].point4_y);
+		if(ctx.isPointInStroke(x,y))
+		{
+			if(square[j].point1_x == 5 && square[j].point4_x == 5)
+			{
+				square[j].line4 = true;
+			}
+			console.log(square[j]);
+
+      break;
+		}
+	}
+}
+k = 0;
+var filledBoxes = [];
+function all_true(user)
+{
+	for(j=0;j<36;j++)
+	{
+    if (square[j].line1 == true && square[j].line2 == true && square[j].line3 == true && square[j].line4 == true && filledBoxes.indexOf(j) === -1)
+     {
+       filledBoxes.push(j);
+       if (user == true)
+       {
+         ctx.lineWidth = 5;
+         ctx.rect(square[j].point1_x,square[j].point1_y,50,50);
+         ctx.fillStyle = "blue";
+         count1 +=1;
+         k += 1;
+         ctx.fill();
+         console.log(k);
+
+      }
+      else if(user == false)
+      {
+       ctx.lineWidth = 5;
+       ctx.rect(square[j].point1_x,square[j].point1_y,50,50);
+       ctx.fillStyle = "red";
+       count2 +=1;
+       k += 1;
+       ctx.fill();
+       console.log(k);
+       
+      }
+    }
+ }
+ winner(k);
+}
+x = 5;
+y = 5;
+while (x <= w) {
+  while (y <= h) {
+    ctx.beginPath();
+    ctx.arc(x,y,4,0,2*Math.PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
+    y = y +50;
+    ctx.moveTo(x,y);
+    ctx.stroke();
+  }
+  x = x+50;
+  y = 5;
+}
+function winner(k)
+{
+  if (k==36)
+  {
+    if (count1 > count2)
+    {
+      alert("User 1 is winner");
+    }
+    else {
+      alert("User 2 is winner");
+    }
+  }
+}
+
+</script>
+
+</body>
+</html>

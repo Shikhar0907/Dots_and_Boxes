@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="350" height="350" style="border:1px solid ;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+x = 5;
+y = 5;
+c.width = 350;
+c.height = 350;
+w = 305;
+h = 305;
+while (x < w) {
+  while (y < h) {
+    //ctx.fillStyle="#FF0000";
+    ctx.strokeRect(x,y,50,50);
+    y = y+50;
+    }
+  x = x+50;
+  y = 5;
+}
+
+x = 5;
+y = 5;
+
+while (x <= w) {
+    while (y <= h) {
+      if (y == h){
+        break;
+      }
+      ctx.moveTo(x,y);
+      y = y+50;
+      ctx.lineTo(x,y);
+      ctx.strokeStyle = "#615F5E";
+      ctx.stroke();
+    }
+    x = x+50;
+    y = 5;
+
+}
+x = 5;
+y = 5;
+while (y < h) {
+  while (x < w) {
+    if (x == w){
+      break;
+    }
+    ctx.moveTo(x,y);
+    x = x+50;
+    ctx.lineTo(x,y);
+    ctx.strokeStyle = "#615F5E";
+    ctx.stroke();
+  }
+  y = y+50;
+  x = 5;
+
+}
+
+x = 5;
+y = 5;
+while (x <= w) {
+  while (y <= h) {
+    ctx.beginPath();
+    ctx.arc(x,y,4,0,2*Math.PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
+    y = y +50;
+    ctx.moveTo(x,y);
+    ctx.stroke();
+  }
+  x = x+50;
+  y = 5;
+
+}
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
